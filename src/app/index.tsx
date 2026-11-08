@@ -1,70 +1,66 @@
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
 
-export default function HomeScreen() {
-  return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          {/* Uygulama Başlığı */}
-          <Text style={styles.title}>TeamUp 🎮</Text>
-          <Text style={styles.subtitle}>Valorant ve CS2 için takım arkadaşını bul!</Text>
+export default function LoginScreen() {
+    const router = useRouter();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-          {/* Oyun Seçim Butonları */}
-          <TouchableOpacity style={[styles.button, styles.valorantButton]}>
-            <Text style={styles.buttonText}>VALORANT Takımı Bul</Text>
-          </TouchableOpacity>
+    const handleLogin = () => {
+        if (!username || !password) {
+            Alert.alert('Hata', 'Lütfen kullanıcı adı ve şifre girin!');
+            return;
+        }
+        router.replace('/(tabs)' as any);
+    };
 
-          <TouchableOpacity style={[styles.button, styles.cs2Button]}>
-            <Text style={styles.buttonText}>CS2 Takımı Bul</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-  );
+    const handleGuestLogin = () => {
+        router.replace('/(tabs)' as any);
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.card}>
+                <Text style={styles.title}>TeamUp 🎮</Text>
+                <Text style={styles.subtitle}>Takım arkadaşını bulmak için giriş yap</Text>
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Kullanıcı Adı"
+                    placeholderTextColor="#6b7280"
+                    value={username}
+                    onChangeText={setUsername}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Şifre"
+                    placeholderTextColor="#6b7280"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+
+                <TouchableOpacity style={styles.submitButton} onPress={handleLogin} activeOpacity={0.8}>
+                    <Text style={styles.submitButtonText}>Giriş Yap</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.guestButton} onPress={handleGuestLogin} activeOpacity={0.8}>
+                    <Text style={styles.guestButtonText}>🚀 Test İçin Hızlı Giriş (Misafir)</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0f1016',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  content: {
-    width: '85%',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: '#9ba1a6',
-    marginBottom: 40,
-    textAlign: 'center',
-  },
-  button: {
-    width: '100%',
-    padding: 18,
-    borderRadius: 14,
-    alignItems: 'center',
-    marginVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  valorantButton: {
-    backgroundColor: '#ff4655', // Valorant Kırmızı
-  },
-  cs2Button: {
-    backgroundColor: '#de9b27', // CS2 Turuncu
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+    container: { flex: 1, backgroundColor: '#0f1016', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 },
+    card: { width: '100%', maxWidth: 400, backgroundColor: '#1a1b24', padding: 24, borderRadius: 16, borderWidth: 1, borderColor: '#2d2f3d' },
+    title: { fontSize: 32, fontWeight: 'bold', color: '#ffffff', textAlign: 'center', marginBottom: 8 },
+    subtitle: { fontSize: 14, color: '#9ba1a6', textAlign: 'center', marginBottom: 24 },
+    input: { backgroundColor: '#0f1016', borderWidth: 1, borderColor: '#2d2f3d', borderRadius: 10, padding: 14, color: '#ffffff', fontSize: 16, marginBottom: 16 },
+    submitButton: { backgroundColor: '#ff4655', padding: 16, borderRadius: 10, alignItems: 'center', marginTop: 8 },
+    submitButtonText: { color: '#ffffff', fontSize: 16, fontWeight: 'bold' },
+    guestButton: { backgroundColor: '#2d2f3d', padding: 14, borderRadius: 10, alignItems: 'center', marginTop: 12 },
+    guestButtonText: { color: '#9ba1a6', fontSize: 14, fontWeight: 'bold' },
 });
